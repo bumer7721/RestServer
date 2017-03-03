@@ -1,0 +1,2 @@
+INSERT INTO public.users(id, is_active, password, user_name) VALUES (default, true, '123456', 'zuzukin');
+INSERT INTO public.users(id, is_active, password, user_name) VALUES (default, false, '321', '4apkis');
