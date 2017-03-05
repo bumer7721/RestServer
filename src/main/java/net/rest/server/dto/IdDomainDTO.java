@@ -1,17 +1,22 @@
-package net.rest.server.domains;
+package net.rest.server.dto;
 
 import java.util.Objects;
 
-import javax.persistence.*;
+import net.rest.server.domains.IdDomain;
 
-@MappedSuperclass
-public class IdDomain {
+public class IdDomainDTO {
 	
 	private Long id;
+	
+	public IdDomainDTO() {
+	}
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id", nullable=false, unique=true)
+	public IdDomainDTO(IdDomain entity) {
+		if (entity != null) {
+			id = entity.getId();
+		}
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -30,10 +35,10 @@ public class IdDomain {
 		if (obj == this) {
 			return true;
 		}
-		if (!(obj instanceof IdDomain)) {
+		if (!(obj instanceof IdDomainDTO)) {
 			return false;
 		}
-		IdDomain base = (IdDomain) obj;
+		IdDomainDTO base = (IdDomainDTO) obj;
 		return Objects.equals(id, base.id);
 	}	
 }

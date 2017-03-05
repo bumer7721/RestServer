@@ -8,6 +8,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import net.rest.server.dao.BaseDAO;
 import net.rest.server.domains.IdDomain;
 
@@ -23,26 +25,30 @@ public abstract class BaseDAOImpl<E extends IdDomain> implements BaseDAO<E> {
 	}
 	
 	@Override
+	@Transactional
 	public E create(E entity) {
 		entityManager.persist(entity);
 		return entity;
 	}
 	
 	@Override
+	@Transactional
 	public E update(E entity) {
 		entityManager.merge(entity);
 		return entity;
 	}
 	
 	@Override
+	@Transactional
 	public void delete(E entity) {
-		entityManager.remove(entity);
+		deleteById(entity.getId());
 	}
 	
 	@Override
+	@Transactional
 	public void deleteById(Long id) {
 		E entity = findOne(id);
-		delete(entity);
+		entityManager.remove(entity);
 	}
 	
 	@Override
@@ -57,5 +63,14 @@ public abstract class BaseDAOImpl<E extends IdDomain> implements BaseDAO<E> {
 		Root<E> root = query.from(clazz);
 		query.select(root);
 		return entityManager.createQuery(query).getResultList();
+	}
+	
+	@Override
+	public Long count() {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = cb.createQuery(Long.class);
+		Root<E> root = query.from(clazz);
+		query.select(cb.count(root));
+		return entityManager.createQuery(query).getSingleResult();
 	}
 }

@@ -18,4 +18,6 @@ public interface BaseDAO<E extends IdDomain> {
 
 	List<E> findAll();
 
+	Long count();
+
 }

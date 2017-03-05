@@ -41,7 +41,7 @@ public class User extends IdDomain {
 		this.isActive = isActive;
 	}
 	
-	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, targetEntity = Role.class)
+	@ManyToMany(cascade={CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, targetEntity = Role.class)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false),
