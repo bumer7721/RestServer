@@ -27,7 +27,7 @@ public class RoleDAOTest extends BaseTest {
 	private RoleDAO roleDAO;
 	
 	@Test
-	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:/testdata/role_data/insert.sql")
+	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:/testdata/insert.sql")
 	public void test1FindAllRoles() {
 		List<Role> roles = roleDAO.findAll();
 		assertThat(roles, notNullValue());
@@ -75,6 +75,7 @@ public class RoleDAOTest extends BaseTest {
 	}
 	
 	@Test
+	@Sql(executionPhase=ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:/testdata/drop.sql")
 	public void test6DeleteRole() {
 		Role role = roleDAO.findOne(3L);
 		roleDAO.delete(role);

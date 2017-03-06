@@ -17,7 +17,7 @@ import net.rest.server.base.BaseTest;
 import net.rest.server.dto.RoleDTO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RoleDAOTest extends BaseTest {
+public class RoleServiceTest extends BaseTest {
 	
 	private final static String ROLE_USER = "user";
 	private final static String ROLE_ANONYMOUS = "anonymous";
@@ -27,7 +27,7 @@ public class RoleDAOTest extends BaseTest {
 	private RoleService roleService;
 	
 	@Test
-	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:/testdata/role_data/insert.sql")
+	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts="classpath:/testdata/insert.sql")
 	public void test1FindAllRoles() {
 		List<RoleDTO> roles = roleService.findAll();
 		assertThat(roles, notNullValue());
@@ -75,6 +75,7 @@ public class RoleDAOTest extends BaseTest {
 	}
 	
 	@Test
+	@Sql(executionPhase=ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:/testdata/drop.sql")
 	public void test6DeleteRole() {
 		RoleDTO role = roleService.findOne(3L);
 		roleService.delete(role);

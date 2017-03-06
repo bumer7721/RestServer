@@ -34,7 +34,7 @@ public class UserDAOTest extends BaseTest {
 	private RoleDAO roleDAO;
 	
 	@Test
-	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts={"classpath:/testdata/role_data/insert.sql", "classpath:/testdata/user_data/insert.sql"})
+	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts={"classpath:/testdata/insert.sql"})
 	public void test1FindAllUsers() {
 		List<User> users = userDAO.findAll();
 		assertThat(users, notNullValue());
@@ -102,6 +102,7 @@ public class UserDAOTest extends BaseTest {
 	}
 	
 	@Test
+	@Sql(executionPhase=ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:/testdata/drop.sql")
 	public void test6DeleteUser(){
 		User user = userDAO.findOne(1L);
 		userDAO.delete(user);

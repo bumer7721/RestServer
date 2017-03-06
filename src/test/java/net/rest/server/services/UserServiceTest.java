@@ -19,7 +19,7 @@ import net.rest.server.dto.RoleDTO;
 import net.rest.server.dto.UserDTO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UserDAOTest extends BaseTest {
+public class UserServiceTest extends BaseTest {
 	
 	private final static String USER_NAME_1 = "Pupkin";
 	private final static String USER_PASSWORD_1 = "0000";
@@ -34,7 +34,7 @@ public class UserDAOTest extends BaseTest {
 	private RoleService roleService;
 	
 	@Test
-	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts={"classpath:/testdata/role_data/insert.sql", "classpath:/testdata/user_data/insert.sql"})
+	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts={"classpath:/testdata/insert.sql"})
 	public void test1FindAllUsers() {
 		List<UserDTO> users = userService.findAll();
 		assertThat(users, notNullValue());
@@ -102,6 +102,7 @@ public class UserDAOTest extends BaseTest {
 	}
 	
 	@Test
+	@Sql(executionPhase=ExecutionPhase.AFTER_TEST_METHOD, scripts="classpath:/testdata/drop.sql")
 	public void test6DeleteUser(){
 		UserDTO user = userService.findOne(1L);
 		userService.delete(user);
