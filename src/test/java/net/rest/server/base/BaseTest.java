@@ -1,4 +1,4 @@
-package net.rest.server.dao;
+package net.rest.server.base;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;

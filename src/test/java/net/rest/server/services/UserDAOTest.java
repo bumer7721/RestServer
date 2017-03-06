@@ -1,4 +1,4 @@
-package net.rest.server.dao;
+package net.rest.server.services;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -15,8 +15,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import net.rest.server.base.BaseTest;
-import net.rest.server.domains.Role;
-import net.rest.server.domains.User;
+import net.rest.server.dto.RoleDTO;
+import net.rest.server.dto.UserDTO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserDAOTest extends BaseTest {
@@ -28,22 +28,22 @@ public class UserDAOTest extends BaseTest {
 	private final static String USER_PASSWORD_2 = "123456";
 	
 	@Autowired
-	private UserDAO userDAO;
+	private UserService userService;
 	
 	@Autowired
-	private RoleDAO roleDAO;
+	private RoleService roleService;
 	
 	@Test
 	@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD, scripts={"classpath:/testdata/role_data/insert.sql", "classpath:/testdata/user_data/insert.sql"})
 	public void test1FindAllUsers() {
-		List<User> users = userDAO.findAll();
+		List<UserDTO> users = userService.findAll();
 		assertThat(users, notNullValue());
 		assertThat(users.size(), equalTo(2));
 	}
 	
 	@Test
 	public void test2FindOneUser() {
-		User user = userDAO.findOne(1L);
+		UserDTO user = userService.findOne(1L);
 		
 		assertThat(user, notNullValue());		
 		assertThat(user.getId(), equalTo(1L));		
@@ -54,15 +54,15 @@ public class UserDAOTest extends BaseTest {
 	
 	@Test
 	public void test3InsertUser() {
-		Role role = roleDAO.findOne(2L);
+		RoleDTO role = roleService.findOne(2L);
 
-		User user = new User();
+		UserDTO user = new UserDTO();
 		user.setUserName(USER_NAME_1); 
 		user.setPassWord(USER_PASSWORD_1); 
 		user.setIsActive(true);
 		user.setRoles(Arrays.asList(role));
 		
-		User newUser = userDAO.create(user);
+		UserDTO newUser = userService.create(user);
 		assertThat(newUser.getId(), equalTo(3L));
 		assertThat(newUser.getUserName(), equalTo(user.getUserName()));
 		assertThat(newUser.getPassWord(), equalTo(user.getPassWord()));
@@ -71,25 +71,25 @@ public class UserDAOTest extends BaseTest {
 		assertThat(newUser.getRoles().size(), equalTo(1));
 		assertThat(newUser.getRoles().get(0).getId(), equalTo(role.getId()));
 		
-		assertThat(userDAO.count(), equalTo(3L));
+		assertThat(userService.count(), equalTo(3L));
 	}
 	
 	@Test
 	public void test4DeleteUserById() {
-		userDAO.deleteById(3L);
-		assertThat(userDAO.count(), equalTo(2L));
+		userService.deleteById(3L);
+		assertThat(userService.count(), equalTo(2L));
 		
-		assertThat(roleDAO.count(), equalTo(2L));
+		assertThat(roleService.count(), equalTo(2L));
 	}
 	
 	@Test
 	public void test5UpdateUser() {
-		Role role = roleDAO.findOne(1L);
-		User user = userDAO.findOne(2L);
+		RoleDTO role = roleService.findOne(1L);
+		UserDTO user = userService.findOne(2L);
 		user.setUserName(USER_NAME_1);
 		user.setRoles(Arrays.asList(role));
 		
-		User updatedUser = userDAO.update(user);
+		UserDTO updatedUser = userService.update(user);
 		assertThat(updatedUser.getId(), equalTo(2L));
 		assertThat(updatedUser.getUserName(), equalTo(user.getUserName()));
 		assertThat(updatedUser.getPassWord(), equalTo(user.getPassWord()));
@@ -98,17 +98,17 @@ public class UserDAOTest extends BaseTest {
 		assertThat(updatedUser.getRoles().size(), equalTo(1));
 		assertThat(updatedUser.getRoles().get(0).getId(), equalTo(role.getId()));
 		
-		assertThat(userDAO.count(), equalTo(2L));
+		assertThat(userService.count(), equalTo(2L));
 	}
 	
 	@Test
 	public void test6DeleteUser(){
-		User user = userDAO.findOne(1L);
-		userDAO.delete(user);
-		assertThat(userDAO.count(), equalTo(1L));
+		UserDTO user = userService.findOne(1L);
+		userService.delete(user);
+		assertThat(userService.count(), equalTo(1L));
 		
-		user = userDAO.findOne(2L);
-		userDAO.delete(user);
-		assertThat(userDAO.count(), equalTo(0L));
+		user = userService.findOne(2L);
+		userService.delete(user);
+		assertThat(userService.count(), equalTo(0L));
 	}
 }

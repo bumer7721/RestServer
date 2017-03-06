@@ -44,11 +44,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public UserDTO findOne(Long id) {
 		return new UserDTO(userDAO.findOne(id));
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<UserDTO> findAll() {
 		List<UserDTO> res = null;
 		List<User> users = userDAO.findAll();
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Long count() {
 		return userDAO.count();
 	}
